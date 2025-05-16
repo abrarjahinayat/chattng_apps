@@ -1,13 +1,77 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router'
+import toast, { Toaster } from "react-hot-toast";
+import {  signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../src/firebase.config';
+import { useNavigate } from 'react-router';
 
-const Login = () => {
+const Login =() => {
+
+    let [userinfo, setUserinfo] = useState({
+      name: "",
+      email: "",
+      password: "",
+    });
+     
+
+    let navigate = useNavigate()
+
+      let handleEmail = (e) => {
+    setUserinfo((prev) => {
+      return { ...prev, email: e.target.value };
+    });
+  };
+
+  let handlePassword = (e) => {
+    setUserinfo((prev) => {
+      return { ...prev, password: e.target.value };
+    });
+  };
+ 
+
+let handleSubmit=(e)=>{
+  e.preventDefault();
+ if(!userinfo.email || !userinfo.password){
+  toast.error("All field are required")
+ 
+ }else{
+  signInWithEmailAndPassword(auth, userinfo.email, userinfo.password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user)
+    if(user.emailVerified){
+      navigate("/home")
+
+    }else{
+      toast(` Hey.. "${user.displayName}"  Please Verify your email `, {
+       icon: '👋',
+});
+    }
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode)
+         if (errorCode.includes("auth/invalid-credential")) {
+            toast.error("Email or Password invalid");
+          }
+          setUserinfo({
+            email: "",
+            password: "",
+          });
+  });
+ }
+}
+
   return (
 <div className="min-h-screen flex fle-col items-center justify-center">
+   <Toaster />
   <div className="py-6 px-4">
     <div className="grid md:grid-cols-2 items-center gap-6 max-w-6xl w-full">
       <div className="border border-slate-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mb-12">
             <h3 className="text-slate-900 text-3xl font-semibold">Sign in</h3>
             <p className="text-slate-500 text-sm mt-6 leading-relaxed">
@@ -17,15 +81,17 @@ const Login = () => {
           </div>
           <div>
             <label className="text-slate-800 text-sm font-medium mb-2 block">
-              User name
+             Your Email
             </label>
             <div className="relative flex items-center">
               <input
-                name="username"
-                type="text"
+                  onChange={handleEmail}
+                  value={userinfo.email}
+                name="email"
+                type="email"
                 required=""
                 className="w-full text-sm text-slate-800 border border-slate-300 pl-4 pr-10 py-3 rounded-lg outline-blue-600"
-                placeholder="Enter user name"
+                placeholder="Enter email"
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +114,8 @@ const Login = () => {
             </label>
             <div className="relative flex items-center">
               <input
+               onChange={handlePassword}
+               value={userinfo.password}
                 name="password"
                 type="password"
                 required=""
@@ -94,7 +162,7 @@ const Login = () => {
           </div>
           <div className="!mt-12">
             <button
-              type="button"
+              type="submit"
               className="w-full shadow-xl py-2.5 px-4 text-[15px] font-medium tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer"
             >
               Sign in
