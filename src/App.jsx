@@ -8,6 +8,7 @@ import Notfound from '../pages/Notfound';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,7 +21,8 @@ const router = createBrowserRouter([
     element: <Login/>,
   },{
     path: "signup",
-    element: <Signup/>,
+    element: <Signup
+    />,
   },
 ]);
 const App = () => {

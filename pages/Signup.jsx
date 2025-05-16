@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router'
 import toast, { Toaster } from 'react-hot-toast';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = () => {
-
+  const auth = getAuth();
   let [userinfo, setUserinfo] = useState({
     name: "",
     email: "",
@@ -38,7 +39,27 @@ const Signup = () => {
     else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userinfo.email)){
     toast.error("Email is invalid")
     } 
-      else ( console.log(userinfo))
+      else {
+        createUserWithEmailAndPassword(auth, userinfo.email, userinfo.password)
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    console.log(user)
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    if(errorCode.includes("auth/email-already-in-use")){
+       toast.error("This Email already in use") 
+    } 
+    setUserinfo({
+       name: "",
+    email: "",
+    password: ""
+    })
+  });
+      }
   }
   return (
   <div className="flex flex-col justify-center sm:h-screen p-4">
@@ -55,6 +76,7 @@ const Signup = () => {
             Your Name
           </label>
           <input onChange={handleName}
+          value={userinfo.name}
             name="name"
             type="text"
             className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
@@ -67,6 +89,7 @@ const Signup = () => {
           </label>
           <input
           onChange={handleEmail}
+          value={userinfo.email}
             name="email"
             type="text"
             className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
@@ -78,6 +101,7 @@ const Signup = () => {
              Password
           </label>
           <input onChange={handlePassword}
+          value={userinfo.password}
             name="password"
             type="password"
             className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
