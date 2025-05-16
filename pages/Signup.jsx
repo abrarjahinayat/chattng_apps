@@ -1,26 +1,72 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router'
+import toast, { Toaster } from 'react-hot-toast';
 
 const Signup = () => {
+
+  let [userinfo, setUserinfo] = useState({
+    name: "",
+    email: "",
+    password: ""
+  })
+
+
+  let handleName=(e)=>{
+    setUserinfo((prev)=>{
+      return{
+        ... prev, name:e.target.value
+      }
+    })
+  }
+
+  let handleEmail=(e)=>{
+    setUserinfo((prev)=>{
+      return{...prev, email:e.target.value}
+    })
+  }
+
+  let handlePassword =(e)=>{
+    setUserinfo((prev)=>{
+      return{...prev, password:e.target.value}
+    })
+  }
+  let handleSubmit =(e)=>{
+    e.preventDefault()
+    if(!userinfo.name || !userinfo.email || !userinfo.password){
+      toast.error("All field are required")
+    }
+    else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userinfo.email)){
+    toast.error("Email is invalid")
+    } 
+      else ( console.log(userinfo))
+  }
   return (
   <div className="flex flex-col justify-center sm:h-screen p-4">
+    <Toaster />
   <div className="max-w-md w-full mx-auto border border-slate-300 rounded-2xl p-8">
     <div className="text-center mb-12">
-      <a href="javascript:void(0)">
-        <img
-          src="https://readymadeui.com/readymadeui.svg"
-          alt="logo"
-          className="w-40 inline-block"
-        />
-      </a>
+      <h1  className="text-3xl font-bold">Sign Up</h1>
     </div>
-    <form>
+    <form onSubmit={handleSubmit}>
+      
       <div className="space-y-6">
         <div>
           <label className="text-slate-800 text-sm font-medium mb-2 block">
-            Email Id
+            Your Name
+          </label>
+          <input onChange={handleName}
+            name="name"
+            type="text"
+            className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
+            placeholder="Your Name"
+          />
+        </div>
+        <div>
+          <label className="text-slate-800 text-sm font-medium mb-2 block">
+            Enter Email
           </label>
           <input
+          onChange={handleEmail}
             name="email"
             type="text"
             className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
@@ -29,27 +75,16 @@ const Signup = () => {
         </div>
         <div>
           <label className="text-slate-800 text-sm font-medium mb-2 block">
-            Password
+             Password
           </label>
-          <input
+          <input onChange={handlePassword}
             name="password"
             type="password"
             className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
             placeholder="Enter password"
           />
         </div>
-        <div>
-          <label className="text-slate-800 text-sm font-medium mb-2 block">
-            Confirm Password
-          </label>
-          <input
-            name="cpassword"
-            type="password"
-            className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
-            placeholder="Enter confirm password"
-          />
-        </div>
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <input
             id="remember-me"
             name="remember-me"
@@ -68,11 +103,11 @@ const Signup = () => {
               Terms and Conditions
             </a>
           </label>
-        </div>
+        </div> */}
       </div>
       <div className="mt-12">
         <button
-          type="button"
+          type="submit"
           className="w-full py-3 px-4 text-sm tracking-wider font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer"
         >
           Create an account
