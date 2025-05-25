@@ -45,8 +45,10 @@ const Signup = () => {
     ) {
       toast.error("Email is invalid");
     } else {
+    
       createUserWithEmailAndPassword(auth, userinfo.email, userinfo.password)
         .then((userCredential) => {
+            toast.success("Signup successfully")
           sendEmailVerification(auth.currentUser).then(() => {
             // Email verification sent!
             updateProfile(auth.currentUser, {
@@ -81,6 +83,7 @@ const Signup = () => {
     <div className="flex flex-col justify-center sm:h-screen p-4">
       <Toaster />
       <div className="max-w-md w-full mx-auto border border-slate-300 rounded-2xl p-8">
+        <img src="../public/logo.png " alt="" />
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold">Sign Up</h1>
         </div>
