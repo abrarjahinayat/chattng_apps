@@ -4,9 +4,11 @@ import toast, { Toaster } from "react-hot-toast";
 import {  signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../src/firebase.config';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { userLoginInfo } from '../src/Redux/userSlice';
 
 const Login =() => {
-
+    let dispatch = useDispatch()
     let [userinfo, setUserinfo] = useState({
       name: "",
       email: "",
@@ -41,7 +43,9 @@ let handleSubmit=(e)=>{
     const user = userCredential.user;
     console.log(user)
     if(user.emailVerified){
-      navigate("/home")
+      dispatch(userLoginInfo(user))
+      localStorage.setItem("login",JSON.stringify(user))
+      navigate("/")
 
     }else{
       toast(` Hey.. "${user.displayName}"  Please Verify your email `, {

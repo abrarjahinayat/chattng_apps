@@ -58,7 +58,7 @@ const Signup = () => {
               .then(() => {
                 const user = userCredential.user;
                 console.log(user);
-                navigate("/")
+                navigate("/login")
               })
               .catch((error) => {
                 console.log(error);
