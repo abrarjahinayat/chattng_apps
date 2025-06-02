@@ -4,7 +4,19 @@ import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { MdGroups } from "react-icons/md";
 import { BiGroup } from "react-icons/bi";
 import { MdNotificationAdd } from "react-icons/md";
+import { LuLogOut } from "react-icons/lu";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router";
 const Sidebar = () => {
+  const nevigate = useNavigate()
+    const auth = getAuth();
+  let handleLogout =()=>{
+  signOut(auth).then(() => {
+  nevigate('/login')
+}).catch((error) => {
+   alert(error)
+});
+  }
   return (
     <>
       {/* Component Start */}
@@ -279,26 +291,13 @@ const Sidebar = () => {
             </a>
           </div>
         </div>
-        <a
-          className="flex items-center justify-center w-full h-16 mt-auto bg-indigo-800 hover:bg-indigo-700"
+        <button onClick={handleLogout}
+          className="flex items-center justify-center w-full h-16 mt-auto bg-indigo-800 hover:bg-red-700 cursor-pointer "
           href="#"
         >
-          <svg
-            className="w-6 h-6 stroke-current"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span className="ml-2 text-sm font-medium">Account</span>
-        </a>
+         <LuLogOut className="text-white" />
+          <span className="ml-2 text-sm font-medium text-white ">Logout</span>
+        </button>
       </div>
       {/* Component End  */}
     </>

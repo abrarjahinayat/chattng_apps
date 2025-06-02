@@ -6,8 +6,14 @@ import { auth } from '../src/firebase.config';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { userLoginInfo } from '../src/Redux/userSlice';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { FcGoogle } from "react-icons/fc";
+
+
 
 const Login =() => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
     let dispatch = useDispatch()
     let [userinfo, setUserinfo] = useState({
       name: "",
@@ -44,7 +50,7 @@ let handleSubmit=(e)=>{
     console.log(user)
     if(user.emailVerified){
       dispatch(userLoginInfo(user))
-      localStorage.setItem("login",JSON.stringify(user))
+      // localStorage.setItem("login",JSON.stringify(user))
       navigate("/")
 
     }else{
@@ -69,6 +75,20 @@ let handleSubmit=(e)=>{
  }
 }
 
+    let handleGooglelogin=() =>{
+     signInWithPopup(auth, provider)
+  .then((result) => {
+      
+        navigate('/')
+      dispatch(userLoginInfo(user))
+    // ...
+  }).catch((error) => {
+    const errorCode = error.code;
+    console.log(errorCode)
+  });
+
+    }
+
   return (
 <div className="min-h-screen flex fle-col items-center justify-center">
    <Toaster />
@@ -84,6 +104,7 @@ let handleSubmit=(e)=>{
             </p>
           </div>
           <div>
+            <button onClick={handleGooglelogin} className='text-md mb-2 font-bold flex items-center gap-x-2 p-2 rounded-2xl cursor-pointer bg-gray-300 ' > <FcGoogle className='text-2xl' />Sign in with Google </button>
             <label className="text-slate-800 text-sm font-medium mb-2 block">
              Your Email
             </label>
