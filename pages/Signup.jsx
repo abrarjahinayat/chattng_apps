@@ -1,3 +1,4 @@
+import { getDatabase, ref, set } from "firebase/database";
 import React, { useState } from "react";
 import { Link } from "react-router";
 import toast, { Toaster } from "react-hot-toast";
@@ -14,7 +15,8 @@ const Signup = () => {
     email: "",
     password: "",
   });
- let navigate = useNavigate()
+  let navigate = useNavigate();
+  const db = getDatabase();
   let handleName = (e) => {
     setUserinfo((prev) => {
       return {
@@ -35,7 +37,7 @@ const Signup = () => {
       return { ...prev, password: e.target.value };
     });
   };
-  
+
   let handleSubmit = (e) => {
     e.preventDefault();
     if (!userinfo.name || !userinfo.email || !userinfo.password) {
@@ -45,10 +47,9 @@ const Signup = () => {
     ) {
       toast.error("Email is invalid");
     } else {
-    
       createUserWithEmailAndPassword(auth, userinfo.email, userinfo.password)
         .then((userCredential) => {
-            toast.success("Signup successfully")
+          toast.success("Signup successfully");
           sendEmailVerification(auth.currentUser).then(() => {
             // Email verification sent!
             updateProfile(auth.currentUser, {
@@ -58,7 +59,15 @@ const Signup = () => {
               .then(() => {
                 const user = userCredential.user;
                 console.log(user);
-                navigate("/login")
+                set(ref(db, "users/" + user.uid), {
+                  name: user.displayName,
+                  email: user.email,
+                  
+                }).then(()=>{
+                  navigate("/login") 
+                }).catch((error) => {
+                console.log(error);
+              });
               })
               .catch((error) => {
                 console.log(error);

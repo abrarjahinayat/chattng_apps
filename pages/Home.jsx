@@ -6,15 +6,8 @@ const Home = () => {
 
 
   return ( 
-    <div className='grid grid-cols-3 mx-auto gap-x-10'>
-
-      {/* <h1>{data.displayName}</h1> */}
-        {/* <Userlist/>
-        <Userlist/> 
-        <Userlist/> 
-        <Userlist/> 
-        <Userlist/> 
-        <Userlist/>  */}
+    <div className='grid grid-cols-3 gap-x-10'>
+      <Userlist/>
     </div>
 
 

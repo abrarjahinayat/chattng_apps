@@ -7,16 +7,21 @@ import { MdNotificationAdd } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 const Sidebar = () => {
-  const nevigate = useNavigate()
-    const auth = getAuth();
-  let handleLogout =()=>{
-  signOut(auth).then(() => {
-  nevigate('/login')
-}).catch((error) => {
-   alert(error)
-});
-  }
+  const nevigate = useNavigate();
+  const user = useSelector((state) => state.userLogin.value);
+  console.log(user);
+  const auth = getAuth();
+  let handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        nevigate("/login");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
   return (
     <>
       {/* Component Start */}
@@ -193,8 +198,11 @@ const Sidebar = () => {
       {/* Component Start */}
       <div className="flex flex-col items-center w-40 h-screen  overflow-hidden text-indigo-300 bg-indigo-900 rounded">
         <a className="flex items-center w-full px-3 mt-3" href="#">
-          <RiChat1Fill className="text-2xl text-white" />
-          <span className="ml-2 text-white text-xl font-bold">Chattrix</span>
+          <RiChat1Fill className="text-2xl text-amber-500" />
+          <span className="ml-2 text-amber-500 text-xl font-bold">Chattrix</span>
+        </a> 
+         <a className="flex items-center w-full px-3 mt-3" href="#">
+          <span className="ml-2 text-white text-xl font-bold">{user.name}</span>
         </a>
         <div className="w-full px-2">
           <div className="flex flex-col items-center w-full mt-3 border-t border-gray-700">
@@ -291,11 +299,12 @@ const Sidebar = () => {
             </a>
           </div>
         </div>
-        <button onClick={handleLogout}
+        <button
+          onClick={handleLogout}
           className="flex items-center justify-center w-full h-16 mt-auto bg-indigo-800 hover:bg-red-700 cursor-pointer "
           href="#"
         >
-         <LuLogOut className="text-white" />
+          <LuLogOut className="text-white" />
           <span className="ml-2 text-sm font-medium text-white ">Logout</span>
         </button>
       </div>
