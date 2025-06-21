@@ -202,7 +202,7 @@ const Sidebar = () => {
           <span className="ml-2 text-amber-500 text-xl font-bold">Chattrix</span>
         </a> 
          <a className="flex items-center w-full px-3 mt-3" href="#">
-          <span className="ml-2 text-white text-xl font-bold">{user.name}</span>
+          <span className="ml-2 text-white text-xl font-bold">{user?.name}</span>
         </a>
         <div className="w-full px-2">
           <div className="flex flex-col items-center w-full mt-3 border-t border-gray-700">

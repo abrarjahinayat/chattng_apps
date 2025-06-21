@@ -1,66 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 import { auth } from "../firebase.config";
-const Userlist = () => {
+const Friendrequestlist = () => {
   const db = getDatabase();
-  const [Userlist, SetUserlist] = useState([]);
-  const [Checklist, SetChecklist] = useState([]);
-  const [Checkfreindlist, SetCheckfriendlist] = useState([]);
-  useEffect(() => {
-    const userListRef = ref(db, "users/");
-    onValue(userListRef, (snapshot) => {
-      const array = [];
-      snapshot.forEach((item) => {
-        if (item.key != auth.currentUser.uid) {
-          array.push({ ...item.val(), id: item.key });
-        }
-      });
-
-      SetUserlist(array);
-    });
-  }, []);
-  console.log(Userlist);
-
-  //=========== Check list==========
-
+  const [Requestlist, SetRequestlist] = useState([]);
+ 
   useEffect(() => {
     const userreqlistRef = ref(db, "friendreqlist/");
     onValue(userreqlistRef, (snapshot) => {
       const array = [];
       snapshot.forEach((item) => {
-        array.push(item.val().senderid + item.val().receiverid);
+        if(auth.currentUser.uid == item.val().receiverid){
+
+            array.push({...item.val(), id:item.key});
+        }
       });
-      SetChecklist(array);
+
+      SetRequestlist(array);
     });
   }, []);
 
+  console.log(Requestlist)
 
-    useEffect(() => {
-    const userreqlistRef = ref(db, "friendlist/");
-    onValue(userreqlistRef, (snapshot) => {
-      const array = [];
-      snapshot.forEach((item) => {
-        array.push(item.val().senderid + item.val().receiverid);
-      });
-      SetCheckfriendlist(array);
-    });
-  }, []);
+  const handleAccept = (item)=>{
+    set(push(ref(db, "friendlist/")), {
+         ...item,
+        }).then(() => {  
+            remove(ref(db, "friendreqlist/" + item.id))
+          console.log("friend accept");
+        });
+      
+  }
 
-  
-
-  const handleFriendrequest = (item) => {
-    console.log("click");
-
-    set(push(ref(db, "friendreqlist/")), {
-      sendername: auth.currentUser.displayName,
-      senderid: auth.currentUser.uid,
-      receivername: item.name,
-      receiverid: item.id,
-    }).then(() => {
-      console.log("friend req send");
-    });
-  };
+  const handleDelete = (item)=>{
+     remove(ref(db, "friendreqlist/" + item.id))
+  }
 
   return (
     <>
@@ -70,7 +45,7 @@ const Userlist = () => {
         <div className="p-4 w-md bg-white rounded-lg border shadow-md sm:p-8 ">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold leading-none text-gray-900">
-              User List
+              Friend Request List
             </h3>
             <a
               href="#"
@@ -113,10 +88,11 @@ const Userlist = () => {
             <ul
               role="list"
               className="divide-y divide-gray-200 h-[300px] overflow-y-scroll pr-5"
-            >
-              {Userlist.map((item) => {
-                return (
-                  <li className="py-3 sm:py-4">
+            > 
+
+            {
+                Requestlist.map((item)=>(
+                      <li className="py-3 sm:py-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
                         <img
@@ -127,34 +103,24 @@ const Userlist = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate ">
-                          {item.name}
+                        {item.sendername}
                         </p>
                         <p className="text-sm text-gray-500 truncate ">
-                          {item.email}
+                       
                         </p>
                       </div>
-                      {
-                        Checkfreindlist.includes(auth.currentUser.uid + item.id) ||
-                      Checkfreindlist.includes(item.id + auth.currentUser.uid) ? (
-                        <button>Cancel</button>
-                      )
-                      :
-                      
-                      Checklist.includes(auth.currentUser.uid + item.id) ||
-                      Checklist.includes(item.id + auth.currentUser.uid) ? (
-                        <button>Cancel</button>
-                      ) : (
-                        <div
-                          onClick={() => handleFriendrequest(item)}
-                          className="inline-flex items-center text-base font-semibold text-white bg-blue-500 p-2 rounded-2xl "
-                        >
-                          <FaPlus />
-                        </div>
-                      )}
+                      <div onClick={()=>handleAccept(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-green-500 p-1.5 rounded-md ">
+                        Accept
+                      </div>  <div onClick={()=>handleDelete(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md ">
+                        Delete
+                      </div>
                     </div>
                   </li>
-                );
-              })}
+                ))
+            }
+
+                
+         
             </ul>
           </div>
         </div>
@@ -163,4 +129,4 @@ const Userlist = () => {
   );
 };
 
-export default Userlist;
+export default Friendrequestlist;

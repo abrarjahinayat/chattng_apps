@@ -169,8 +169,7 @@ const Signup = () => {
           <p className="text-slate-800 text-sm mt-6 text-center">
             Already have an account?{" "}
             <Link
-              to={"/"}
-              href="javascript:void(0);"
+              to={"/login"}
               className="text-blue-600 font-medium hover:underline ml-1"
             >
               Login here
