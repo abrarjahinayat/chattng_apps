@@ -21,7 +21,7 @@ const Friendrequestlist = () => {
     });
   }, []);
 
-  console.log(Requestlist)
+  // console.log(Requestlist)
 
   const handleAccept = (item)=>{
     set(push(ref(db, "friendlist/")), {
@@ -112,7 +112,7 @@ const Friendrequestlist = () => {
                       <div onClick={()=>handleAccept(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-green-500 p-1.5 rounded-md ">
                         Accept
                       </div>  <div onClick={()=>handleDelete(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md ">
-                        Delete
+                       Reject
                       </div>
                     </div>
                   </li>

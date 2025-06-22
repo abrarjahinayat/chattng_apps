@@ -20,7 +20,7 @@ const Userlist = () => {
       SetUserlist(array);
     });
   }, []);
-  console.log(Userlist);
+  // console.log(Userlist);
 
   //=========== Check list==========
 
@@ -136,20 +136,20 @@ const Userlist = () => {
                       {
                         Checkfreindlist.includes(auth.currentUser.uid + item.id) ||
                       Checkfreindlist.includes(item.id + auth.currentUser.uid) ? (
-                        <button>Cancel</button>
+                        <button className="items-center text-base font-semibold text-white bg-blue-500 p-1.5 rounded-md" >Friend</button>
                       )
                       :
                       
                       Checklist.includes(auth.currentUser.uid + item.id) ||
                       Checklist.includes(item.id + auth.currentUser.uid) ? (
-                        <button>Cancel</button>
+                        <button>requested</button>
                       ) : (
-                        <div
+                        <button
                           onClick={() => handleFriendrequest(item)}
-                          className="inline-flex items-center text-base font-semibold text-white bg-blue-500 p-2 rounded-2xl "
+                          className="inline-flex items-center text-[14px] font-semibold text-white bg-blue-500 p-2 rounded-md "
                         >
-                          <FaPlus />
-                        </div>
+                          Add Friend
+                        </button>
                       )}
                     </div>
                   </li>

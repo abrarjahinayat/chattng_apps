@@ -46,6 +46,7 @@ const Login = () => {
           const user = userCredential.user;
           console.log(user);
           if (user.emailVerified) {
+            console.log(user)
             dispatch(userLoginInfo(user));
             // localStorage.setItem("login",JSON.stringify(user))
             navigate("/");

@@ -62,12 +62,13 @@ const Signup = () => {
                 set(ref(db, "users/" + user.uid), {
                   name: user.displayName,
                   email: user.email,
-                  
-                }).then(()=>{
-                  navigate("/login") 
-                }).catch((error) => {
-                console.log(error);
-              });
+                })
+                  .then(() => {
+                    navigate("/login");
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               })
               .catch((error) => {
                 console.log(error);
@@ -137,26 +138,55 @@ const Signup = () => {
                 placeholder="Enter password"
               />
             </div>
-            {/* <div className="flex items-center">
-          <input
-            id="remember-me"
-            name="remember-me"
-            type="checkbox"
-            className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
-          />
-          <label
-            htmlFor="remember-me"
-            className="text-slate-800 ml-3 block text-sm"
-          >
-            I accept the{" "}
-            <a
-              href="javascript:void(0);"
-              className="text-blue-600 font-medium hover:underline ml-1"
-            >
-              Terms and Conditions
-            </a>
-          </label>
-        </div> */}
+            {/* gender radio box */}
+
+            {/* <div className="items-center gap-5">
+                <p className=" text-slate-800 text-sm font-medium mb-2" >  Gender:</p>
+                
+              <div className="inline-flex gap-5 items-center">
+              
+                <label
+                  className="relative flex items-center cursor-pointer"
+                  htmlFor="html"
+                >
+                 
+                  <input
+                    name="framework"
+                    type="radio"
+                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                    id="html"
+                  />
+                  <span className="absolute bg-slate-800 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                </label>
+                <label
+                  className="ext-slate-800 cursor-pointer text-sm font-medium ml-2"
+                  htmlFor="html"
+                >
+                  Male
+                </label>
+              </div>
+              <div className="inline-flex ml-10 items-center">
+                <label
+                  className="relative flex items-center cursor-pointer"
+                  htmlFor="react"
+                >
+                  <input
+                    name="framework"
+                    type="radio"
+                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                    id="react"
+                    defaultChecked=""
+                  />
+                  <span className="absolute bg-slate-800 w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                </label>
+                <label
+                  className="text-slate-800 cursor-pointer text-sm font-medium ml-2"
+                  htmlFor="react"
+                >
+                  Female
+                </label>
+              </div>
+            </div> */}
           </div>
           <div className="mt-12">
             <button
