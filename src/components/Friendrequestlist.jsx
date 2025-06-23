@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 import { auth } from "../firebase.config";
+import toast, { Toaster } from "react-hot-toast";
+
 const Friendrequestlist = () => {
   const db = getDatabase();
   const [Requestlist, SetRequestlist] = useState([]);
- 
+
   useEffect(() => {
     const userreqlistRef = ref(db, "friendreqlist/");
     onValue(userreqlistRef, (snapshot) => {
       const array = [];
       snapshot.forEach((item) => {
-        if(auth.currentUser.uid == item.val().receiverid){
-
-            array.push({...item.val(), id:item.key});
+        if (auth.currentUser.uid == item.val().receiverid) {
+          array.push({ ...item.val(), id: item.key });
         }
       });
 
@@ -21,24 +29,43 @@ const Friendrequestlist = () => {
     });
   }, []);
 
-  // console.log(Requestlist)
-
-  const handleAccept = (item)=>{
-    set(push(ref(db, "friendlist/")), {
-         ...item,
-        }).then(() => {  
-            remove(ref(db, "friendreqlist/" + item.id))
-          console.log("friend accept");
-        });
-      
+const handleAccept = (item) => {
+  if (item.sendergender === "female") {
+    toast.promise(
+      set(push(ref(db, "friendlist/")), { ...item }).then(() => {
+        return remove(ref(db, "friendreqlist/" + item.id));
+      }),
+      {
+        loading: "Accepting friend...",
+        success: <b> 👋, Hey.. "{item.sendername}" You are Female! Friend accepted successfully!</b>,
+        error: <b>Something went wrong.</b>,
+      }
+    );
+  } else {
+    toast.promise(
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          reject();
+        }, 700); 
+      }),
+      {
+        loading: "Checking permissions...",
+        success: <b>Accepted!</b>,
+        error: <b>  👋, Hey.. "{item.sendername}" Your are not female! Only female users are accepted.
+          </b>,
+      }
+    );
   }
+};
 
-  const handleDelete = (item)=>{
-     remove(ref(db, "friendreqlist/" + item.id))
-  }
+  const handleDelete = (item) => {
+    remove(ref(db, "friendreqlist/" + item.id));
+  };
 
   return (
     <>
+
+    <Toaster />
       {/* component */}
       {/* This is an example component */}
       <div className="max-w-2xl mx-auto mt-4 ">
@@ -88,39 +115,38 @@ const Friendrequestlist = () => {
             <ul
               role="list"
               className="divide-y divide-gray-200 h-[300px] overflow-y-scroll pr-5"
-            > 
-
-            {
-                Requestlist.map((item)=>(
-                      <li className="py-3 sm:py-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
-                        <img
-                          className="w-8 h-8 rounded-full"
-                          src="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
-                          alt="Neil image"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate ">
-                        {item.sendername}
-                        </p>
-                        <p className="text-sm text-gray-500 truncate ">
-                       
-                        </p>
-                      </div>
-                      <div onClick={()=>handleAccept(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-green-500 p-1.5 rounded-md ">
-                        Accept
-                      </div>  <div onClick={()=>handleDelete(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md ">
-                       Reject
-                      </div>
+            >
+              {Requestlist.map((item) => (
+                <li className="py-3 sm:py-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-shrink-0">
+                      <img
+                        className="w-8 h-8 rounded-full"
+                        src="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
+                        alt="Neil image"
+                      />
                     </div>
-                  </li>
-                ))
-            }
-
-                
-         
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate ">
+                        {item.sendername}
+                      </p>
+                      <p className="text-sm text-gray-500 truncate "></p>
+                    </div>
+                    <div
+                      onClick={() => handleAccept(item)}
+                      className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-green-500 p-1.5 rounded-md "
+                    >
+                      Accept
+                    </div>{" "}
+                    <div
+                      onClick={() => handleDelete(item)}
+                      className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md "
+                    >
+                      Reject
+                    </div>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

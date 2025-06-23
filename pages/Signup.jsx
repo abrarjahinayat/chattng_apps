@@ -14,7 +14,9 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
+    gender: "",
   });
+  console.log(userinfo)
   let navigate = useNavigate();
   const db = getDatabase();
   let handleName = (e) => {
@@ -38,9 +40,15 @@ const Signup = () => {
     });
   };
 
+let handleGender = (e) => {
+    setUserinfo((prev) => {
+      return { ...prev, gender: e.target.value };
+    });
+  };
+
   let handleSubmit = (e) => {
     e.preventDefault();
-    if (!userinfo.name || !userinfo.email || !userinfo.password) {
+    if (!userinfo.name || !userinfo.email || !userinfo.password || !userinfo.gender) {
       toast.error("All field are required");
     } else if (
       !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userinfo.email)
@@ -54,14 +62,17 @@ const Signup = () => {
             // Email verification sent!
             updateProfile(auth.currentUser, {
               displayName: userinfo.name,
-              photoURL: "person.jpg",
+              photoURL: userinfo.gender,
+              // gender: userinfo.gender,
             })
-              .then(() => {
+            .then(() => {
+                // setUserProperties(analytics, { gender: userinfo.radio })
                 const user = userCredential.user;
                 console.log(user);
                 set(ref(db, "users/" + user.uid), {
                   name: user.displayName,
                   email: user.email,
+                  gender: userinfo.gender,
                 })
                   .then(() => {
                     navigate("/login");
@@ -85,6 +96,7 @@ const Signup = () => {
             name: "",
             email: "",
             password: "",
+            gender : " ",
           });
         });
     }
@@ -137,10 +149,14 @@ const Signup = () => {
                 className="text-slate-800 bg-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
                 placeholder="Enter password"
               />
-            </div>
+            </div>  
+            
+            
+
+
             {/* gender radio box */}
 
-            {/* <div className="items-center gap-5">
+            <div className="items-center gap-5">
                 <p className=" text-slate-800 text-sm font-medium mb-2" >  Gender:</p>
                 
               <div className="inline-flex gap-5 items-center">
@@ -151,7 +167,9 @@ const Signup = () => {
                 >
                  
                   <input
-                    name="framework"
+                   onChange={handleGender}
+                   value= "male"
+                    name="gender"
                     type="radio"
                     className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
                     id="html"
@@ -171,7 +189,9 @@ const Signup = () => {
                   htmlFor="react"
                 >
                   <input
-                    name="framework"
+                     onChange={handleGender}
+                   value= "female"
+                    name="gender"
                     type="radio"
                     className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
                     id="react"
@@ -186,7 +206,9 @@ const Signup = () => {
                   Female
                 </label>
               </div>
-            </div> */}
+            </div>
+
+            
           </div>
           <div className="mt-12">
             <button

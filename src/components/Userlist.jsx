@@ -55,6 +55,7 @@ const Userlist = () => {
     set(push(ref(db, "friendreqlist/")), {
       sendername: auth.currentUser.displayName,
       senderid: auth.currentUser.uid,
+      sendergender: auth.currentUser.photoURL,
       receivername: item.name,
       receiverid: item.id,
     }).then(() => {
