@@ -9,39 +9,51 @@ import {
   remove,
 } from "firebase/database";
 import { auth } from "../firebase.config";
-import toast, { Toaster } from "react-hot-toast";
+// import toast, { Toaster } from "react-hot-toast";
 
-const Friendrequestlist = () => {
+const Blocklist = () => {
   const db = getDatabase();
-  const [Requestlist, SetRequestlist] = useState([]);
+  const [Blocklist, SetBlocklist] = useState([]);
 
   useEffect(() => {
-    const userreqlistRef = ref(db, "friendreqlist/");
-    onValue(userreqlistRef, (snapshot) => {
+    const userblocklistRef = ref(db, "blocklist/");
+    onValue(userblocklistRef, (snapshot) => {
       const array = [];
       snapshot.forEach((item) => {
-        if (auth.currentUser.uid == item.val().receiverid) {
-          array.push({ ...item.val(), id: item.key });
-        }
+     if(auth.currentUser.uid == item.val().blockbyuserid){
+
+         array.push({ ...item.val(), id: item.key });
+     }
       });
-
-      SetRequestlist(array);
+      console.log(array)
+      SetBlocklist(array);
     });
-  }, []);
+  }, []); 
 
- const handleAccept = (item)=>{
-    set(push(ref(db, "friendlist/")), {
-         ...item,
-        }).then(() => {  
-            remove(ref(db, "friendreqlist/" + item.id))
-          console.log("friend accept");
+
+const handleUnblock =(item)=>{
+    console.log("unblock")
+    if(auth.currentUser.uid == item.blockbyuserid){
+
+        set(push(ref(db, "friendlist/")), {
+           senderid: item.blockbyuserid,
+           sendername: item.blockbyusername,
+           receiverid: item.blockuserid,
+           receivername: item.blockusername,
+       }).then(() => {  
+            remove(ref(db, "blocklist/" + item.id))
         });
-      
-  }
-
-  const handleDelete = (item) => {
-    remove(ref(db, "friendreqlist/" + item.id));
-  };
+    }else{
+         set(push(ref(db, "friendlist/")), {
+           senderid: item.blockuserid,
+           sendername: item.blockusername,
+           receiverid: item.blockbyuserid,
+           receivername: item.blockbyusername,
+       }).then(() => {  
+            remove(ref(db, "blocklist/" + item.id))
+        });
+    }
+}
 
   return (
     <>
@@ -51,7 +63,7 @@ const Friendrequestlist = () => {
         <div className="p-4 w-md bg-white rounded-lg border shadow-md sm:p-8 ">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold leading-none text-gray-900">
-              Friend Request List
+             Block List
             </h3>
             <a
               href="#"
@@ -95,7 +107,7 @@ const Friendrequestlist = () => {
               role="list"
               className="divide-y divide-gray-200 h-[300px] overflow-y-scroll pr-5"
             >
-              {Requestlist.map((item) => (
+              {Blocklist.map((item) => (
                 <li className="py-3 sm:py-4">
                   <div className="flex items-center space-x-4">
                     <div className="flex-shrink-0">
@@ -107,21 +119,15 @@ const Friendrequestlist = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate ">
-                        {item.sendername}
+                        {item.blockusername}
                       </p>
                       <p className="text-sm text-gray-500 truncate "></p>
                     </div>
                     <div
-                      onClick={() => handleAccept(item)}
+                      onClick={() => handleUnblock(item)}
                       className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-green-500 p-1.5 rounded-md "
                     >
-                      Accept
-                    </div>{" "}
-                    <div
-                      onClick={() => handleDelete(item)}
-                      className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md "
-                    >
-                      Reject
+                    Unblock
                     </div>
                   </div>
                 </li>
@@ -134,4 +140,4 @@ const Friendrequestlist = () => {
   );
 };
 
-export default Friendrequestlist;
+export default Blocklist;

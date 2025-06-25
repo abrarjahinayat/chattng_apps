@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 const Sidebar = () => {
   const nevigate = useNavigate();
   const user = useSelector((state) => state.userLogin.value);
-  console.log(user);
+  // console.log(user);
   const auth = getAuth();
   let handleLogout = () => {
     signOut(auth)

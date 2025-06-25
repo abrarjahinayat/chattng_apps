@@ -7,6 +7,7 @@ const Userlist = () => {
   const [Userlist, SetUserlist] = useState([]);
   const [Checklist, SetChecklist] = useState([]);
   const [Checkfreindlist, SetCheckfriendlist] = useState([]);
+  const [CheckBlocklist, SetCheckBlocklist] = useState([]);
   useEffect(() => {
     const userListRef = ref(db, "users/");
     onValue(userListRef, (snapshot) => {
@@ -16,7 +17,7 @@ const Userlist = () => {
           array.push({ ...item.val(), id: item.key });
         }
       });
-
+      console.log(array)
       SetUserlist(array);
     });
   }, []);
@@ -35,8 +36,7 @@ const Userlist = () => {
     });
   }, []);
 
-
-    useEffect(() => {
+  useEffect(() => {
     const userreqlistRef = ref(db, "friendlist/");
     onValue(userreqlistRef, (snapshot) => {
       const array = [];
@@ -47,15 +47,24 @@ const Userlist = () => {
     });
   }, []);
 
-  
+  useEffect(() => {
+   const userblocklistRef = ref(db, "blocklist/");
+    onValue(userblocklistRef, (snapshot) => {
+      const array = [];
+      snapshot.forEach((item) => {
+        array.push(item.val().blockbyuserid + item.val().blockuserid);
+      });
+      SetCheckBlocklist(array);
+      console.log(array);
+    });
+  }, []);
 
   const handleFriendrequest = (item) => {
-    console.log("click");
 
     set(push(ref(db, "friendreqlist/")), {
       sendername: auth.currentUser.displayName,
       senderid: auth.currentUser.uid,
-      sendergender: auth.currentUser.photoURL,
+      // sendergender: auth.currentUser.photoURL,
       receivername: item.name,
       receiverid: item.id,
     }).then(() => {
@@ -134,16 +143,25 @@ const Userlist = () => {
                           {item.email}
                         </p>
                       </div>
-                      {
-                        Checkfreindlist.includes(auth.currentUser.uid + item.id) ||
-                      Checkfreindlist.includes(item.id + auth.currentUser.uid) ? (
-                        <button className="items-center text-base font-semibold text-white bg-blue-500 p-1.5 rounded-md" >Friend</button>
-                      )
-                      :
-                      
-                      Checklist.includes(auth.currentUser.uid + item.id) ||
-                      Checklist.includes(item.id + auth.currentUser.uid) ? (
+                      {Checkfreindlist.includes(
+                        auth.currentUser.uid + item.id
+                      ) ||
+                      Checkfreindlist.includes(
+                        item.id + auth.currentUser.uid
+                      ) ? (
+                        <button className="items-center text-base font-semibold text-white bg-blue-500 p-1.5 rounded-md">
+                          Friend
+                        </button>
+                      ) : Checklist.includes(auth.currentUser.uid + item.id) ||
+                        Checklist.includes(item.id + auth.currentUser.uid) ? (
                         <button>requested</button>
+                      ) : CheckBlocklist.includes(
+                          auth.currentUser.uid + item.id
+                        ) ||
+                        CheckBlocklist.includes(
+                          item.id + auth.currentUser.uid
+                        ) ? (
+                        <button className="items-center text-base font-semibold text-white bg-red-500 p-1.5 rounded-md">Blocked</button>
                       ) : (
                         <button
                           onClick={() => handleFriendrequest(item)}

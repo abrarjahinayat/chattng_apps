@@ -30,6 +30,30 @@ const Friendlist = () => {
     });
   }, []);
 
+  const handleBlock = (item)=>{
+    if(auth.currentUser.uid == item.senderid){
+set(push(ref(db, "blocklist/")), {
+      blockbyuserid: item.senderid,
+      blockbyusername: item.sendername,
+      blockuserid: item.receiverid,
+      blockusername: item.receivername
+        }).then(() => {  
+            remove(ref(db, "friendlist/" + item.id))
+          console.log("block friend");
+        });
+    }else{
+        set(push(ref(db, "blocklist/")), {
+        blockbyuserid: item.receiverid,
+        blockbyusername: item.receivername,
+        blockuserid: item.senderid,
+        blockusername: item.sendername,
+    }).then(() => {  
+            remove(ref(db, "friendlist/" + item.id))
+          console.log("block friend");
+        });
+  };
+    
+  }
 
   return (
     <>
@@ -39,7 +63,7 @@ const Friendlist = () => {
         <div className="p-4 w-md bg-white rounded-lg border shadow-md sm:p-8 ">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold leading-none text-gray-900">
-              Friend Request List
+              Friend List
             </h3>
             <a
               href="#"
@@ -109,7 +133,7 @@ const Friendlist = () => {
                         }
                       <p className="text-sm text-gray-500 truncate "></p>
                     </div>
-                    <div onClick={()=>handleDelete(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md ">
+                    <div onClick={()=>handleBlock(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md ">
                         Block
                       </div>
                   </div>

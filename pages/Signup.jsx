@@ -14,7 +14,7 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    gender: "",
+    // gender: "",
   });
   console.log(userinfo)
   let navigate = useNavigate();
@@ -40,15 +40,15 @@ const Signup = () => {
     });
   };
 
-let handleGender = (e) => {
-    setUserinfo((prev) => {
-      return { ...prev, gender: e.target.value };
-    });
-  };
+// let handleGender = (e) => {
+//     setUserinfo((prev) => {
+//       return { ...prev, gender: e.target.value };
+//     });
+//   };
 
   let handleSubmit = (e) => {
     e.preventDefault();
-    if (!userinfo.name || !userinfo.email || !userinfo.password || !userinfo.gender) {
+    if (!userinfo.name || !userinfo.email || !userinfo.password) {
       toast.error("All field are required");
     } else if (
       !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userinfo.email)
@@ -62,7 +62,7 @@ let handleGender = (e) => {
             // Email verification sent!
             updateProfile(auth.currentUser, {
               displayName: userinfo.name,
-              photoURL: userinfo.gender,
+              // photoURL: userinfo.gender,
               // gender: userinfo.gender,
             })
             .then(() => {
@@ -72,7 +72,7 @@ let handleGender = (e) => {
                 set(ref(db, "users/" + user.uid), {
                   name: user.displayName,
                   email: user.email,
-                  gender: userinfo.gender,
+                  // gender: userinfo.gender,
                 })
                   .then(() => {
                     navigate("/login");
@@ -96,7 +96,7 @@ let handleGender = (e) => {
             name: "",
             email: "",
             password: "",
-            gender : " ",
+            // gender : " ",
           });
         });
     }
@@ -156,7 +156,7 @@ let handleGender = (e) => {
 
             {/* gender radio box */}
 
-            <div className="items-center gap-5">
+            {/* <div className="items-center gap-5">
                 <p className=" text-slate-800 text-sm font-medium mb-2" >  Gender:</p>
                 
               <div className="inline-flex gap-5 items-center">
@@ -206,7 +206,7 @@ let handleGender = (e) => {
                   Female
                 </label>
               </div>
-            </div>
+            </div> */}
 
             
           </div>
