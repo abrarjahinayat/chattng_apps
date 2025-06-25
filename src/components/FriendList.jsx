@@ -30,47 +30,51 @@ const Friendlist = () => {
     });
   }, []);
 
-  const handleBlock = (item)=>{
-    if(auth.currentUser.uid == item.senderid){
-set(push(ref(db, "blocklist/")), {
-      blockbyuserid: item.senderid,
-      blockbyusername: item.sendername,
-      blockuserid: item.receiverid,
-      blockusername: item.receivername
-        }).then(() => {  
-            remove(ref(db, "friendlist/" + item.id))
-          console.log("block friend");
-        });
-    }else{
-        set(push(ref(db, "blocklist/")), {
+  const handleBlock = (item) => {
+    if (auth.currentUser.uid == item.senderid) {
+      set(push(ref(db, "blocklist/")), {
+        blockbyuserid: item.senderid,
+        blockbyusername: item.sendername,
+        blockuserid: item.receiverid,
+        blockusername: item.receivername,
+      }).then(() => {
+        remove(ref(db, "friendlist/" + item.id));
+        console.log("block friend");
+      });
+    } else {
+      set(push(ref(db, "blocklist/")), {
         blockbyuserid: item.receiverid,
         blockbyusername: item.receivername,
         blockuserid: item.senderid,
         blockusername: item.sendername,
-    }).then(() => {  
-            remove(ref(db, "friendlist/" + item.id))
-          console.log("block friend");
-        });
+      }).then(() => {
+        remove(ref(db, "friendlist/" + item.id));
+        console.log("block friend");
+      });
+    }
   };
-    
-  }
+
+  const [showGroup, setShowGroup] = useState(true);
+
+  const handleCreateGroup = () => {
+    setShowGroup(!showGroup);
+  };
+
 
   return (
     <>
-      {/* component */}
-      {/* This is an example component */}
       <div className="max-w-2xl mx-auto mt-4 ">
         <div className="p-4 w-md bg-white rounded-lg border shadow-md sm:p-8 ">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold leading-none text-gray-900">
               Friend List
             </h3>
-            <a
-              href="#"
-              className="text-sm font-medium text-blue-600 hover:underline"
+            <button
+              onClick={handleCreateGroup}
+              className="inline-flex items-center text-base cursor-pointer font-semibold text-white  bg-indigo-900 p-1.5 rounded-md"
             >
-              View all
-            </a>
+              Create Group
+            </button>
           </div>
 
           <form className="max-w-md mx-auto mb-2">
@@ -103,43 +107,84 @@ set(push(ref(db, "blocklist/")), {
           </form>
 
           <div className="flow-root">
-            <ul
-              role="list"
-              className="divide-y divide-gray-200 h-[300px] overflow-y-scroll pr-5"
-            >
-              {Requestlist.map((item) => (
-                <li className="py-3 sm:py-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="w-8 h-8 rounded-full"
-                        src="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
-                        alt="Neil image"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-
-                        {
-                            auth.currentUser.uid == item.senderid 
-                            ?
-                               <p className="text-sm font-medium text-gray-900 truncate ">
-                        {item.receivername}
-                      </p>
-                        :
-
-                      <p className="text-sm font-medium text-gray-900 truncate ">
-                        {item.sendername}
-                      </p>
-                        }
-                      <p className="text-sm text-gray-500 truncate "></p>
-                    </div>
-                    <div onClick={()=>handleBlock(item)} className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md ">
+            {showGroup ? (
+              <ul
+                role="list"
+                className="divide-y divide-gray-200 h-[300px] overflow-y-scroll pr-5"
+              >
+                {Requestlist.map((item) => (
+                  <li className="py-3 sm:py-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex-shrink-0">
+                        <img
+                          className="w-8 h-8 rounded-full"
+                          src="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
+                          alt="Neil image"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        {auth.currentUser.uid == item.senderid ? (
+                          <p className="text-sm font-medium text-gray-900 truncate ">
+                            {item.receivername}
+                          </p>
+                        ) : (
+                          <p className="text-sm font-medium text-gray-900 truncate ">
+                            {item.sendername}
+                          </p>
+                        )}
+                        <p className="text-sm text-gray-500 truncate "></p>
+                      </div>
+                      <div
+                        onClick={() => handleBlock(item)}
+                        className="inline-flex items-center text-base cursor-pointer font-semibold text-white bg-red-500 p-1.5 rounded-md "
+                      >
                         Block
                       </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul
+                role="list"
+                className="divide-y divide-gray-200 h-[300px] overflow-y-scroll pr-5"
+              >
+                {Requestlist.map((item) => (
+                  <li className="py-3 sm:py-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex-shrink-0">
+                        <img
+                          className="w-8 h-8 rounded-full"
+                          src="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
+                          alt="Neil image"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        {auth.currentUser.uid == item.senderid ? (
+                          <p className="text-sm font-medium text-gray-900 truncate ">
+                            {item.receivername}
+                          </p>
+                        ) : (
+                          <p className="text-sm font-medium text-gray-900 truncate ">
+                            {item.sendername}
+                          </p>
+                        )}
+                        <p className="text-sm text-gray-500 truncate "></p>
+                      </div>
+                      <input
+                        type="checkbox"
+                      ></input>
+                    </div>
+                  </li>
+                ))}
+                <button
+                  className="inline-flex mt-2 relative not-even:items-center text-base cursor-pointer font-semibold text-white bg-indigo-900 p-1.5 rounded-md "
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </ul>
+            )}
           </div>
         </div>
       </div>
