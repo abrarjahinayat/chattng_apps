@@ -33,10 +33,10 @@ const Chatlist = () => {
   const handleselectChat = (item) => {
     // console.log(item)
     if (auth.currentUser.uid == item.senderid) {
-      console.log("receiver");
+    //   console.log("receiver");
       dispatch(chatListInfo({name:item.receivername, id: item.receiverid}))
     } else {
-      console.log("sender");
+    //   console.log("sender");
          dispatch(chatListInfo({name:item.sendername, id: item.senderid}))
     }
   };
