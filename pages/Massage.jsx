@@ -49,7 +49,7 @@ const Massage = () => {
 
   
 const handleKeyPress = (e) => {
-  if (e.key === "Enter" && sendmsg?.trim()) {
+  if (e.key === "Enter" && sendmsg.trim()) {
     handlesend();
   }
 };
@@ -135,7 +135,7 @@ const handleKeyPress = (e) => {
                       <input
                         onChange={handlemsg}
                         value={sendmsg}
-                         onKeyDown={handleKeyPress}
+                        onKeyDown={handleKeyPress}
                         type="text"
                         class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                       />
