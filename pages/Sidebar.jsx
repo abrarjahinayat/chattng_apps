@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 const Sidebar = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
+
   const nevigate = useNavigate();
   const user = useSelector((state) => state.userLogin.value);
   // console.log(user);
