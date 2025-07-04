@@ -10,6 +10,10 @@ import Signup from '../pages/Signup';
 import Sidebar from '../pages/Sidebar';
 import Rootlayout from './components/Rootlayout';
 import Massage from '../pages/Massage';
+import Friends from '../pages/Mobile_pages/Friends';
+import Requestlist from '../pages/Mobile_pages/Requestlist';
+import Block from '../pages/Mobile_pages/Block';
+
 
 
 const router = createBrowserRouter([
@@ -19,6 +23,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, Component: Home },
       { path: "massage", Component: Massage },
+      { path: "friends", Component: Friends },
+      { path: "requestlist", Component: Requestlist },
+      { path: "blocklist", Component: Block },
+
     ],
   },  {
     path: "/login",

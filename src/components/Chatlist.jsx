@@ -1,9 +1,9 @@
 import { onValue, ref, getDatabase } from "firebase/database";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { auth } from "../firebase.config";
-import { useDispatch } from "react-redux";
 import { chatListInfo } from "../Redux/chatSlice";
+
 const Chatlist = () => {
   const [filterResult, setfilterResult] = useState();
   const user = useSelector((state) => state.userLogin.value);
@@ -17,166 +17,107 @@ const Chatlist = () => {
     onValue(userreqlistRef, (snapshot) => {
       const array = [];
       snapshot.forEach((item) => {
-        if (
-          auth.currentUser.uid == item.val().senderid ||
-          auth.currentUser.uid == item.val().receiverid
-        ) {
+        if (auth.currentUser.uid == item.val().senderid || auth.currentUser.uid == item.val().receiverid) {
           array.push({ ...item.val(), id: item.key });
         }
       });
-
       setchatlist(array);
     });
   }, []);
-  // console.log(chatlist);
 
   const handleselectChat = (item) => {
-    // console.log(item)
     if (auth.currentUser.uid == item.senderid) {
-      //   console.log("receiver");
       dispatch(chatListInfo({ name: item.receivername, id: item.receiverid }));
     } else {
-      //   console.log("sender");
       dispatch(chatListInfo({ name: item.sendername, id: item.senderid }));
     }
   };
 
   const handlesearch = (e) => {
-
-    let filterresult = chatlist.filter(
+    const filterresult = chatlist.filter(
       (item) =>
-        item.sendername.toUpperCase().replaceAll(" ","").includes(e.target.value.toUpperCase())  ||
-        item.receivername.toUpperCase().replaceAll(" ","").includes(e.target.value.toUpperCase())
+        item.sendername.toUpperCase().replaceAll(" ", "").includes(e.target.value.toUpperCase()) ||
+        item.receivername.toUpperCase().replaceAll(" ", "").includes(e.target.value.toUpperCase())
     );
     setfilterResult(filterresult);
   };
-  console.log(filterResult);
+
   return (
     <div>
-      {" "}
-      <div class="flex flex-col py-8 pl-6 pr-2 w-90 bg-white flex-shrink-0">
-        <div class="flex flex-row items-center justify-center h-12 w-full">
-          <div class="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+      <div className="flex flex-col lg:flex-col flex-wrap lg:py-8 lg:pl-6 pr-2 w-full lg:w-90 bg-white flex-shrink-0">
+
+        {/* Logo Section - hidden on mobile */}
+        <div className="hidden lg:flex flex-row items-center justify-center h-12 lg:w-full">
+          <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                 d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-              ></path>
+              />
             </svg>
           </div>
-          <div class="ml-2 font-bold text-2xl">Chattrix</div>
+          <div className="ml-2 font-bold text-2xl">Chattrix</div>
         </div>
-        <div class="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
-          <div class="flex items-center justify-center h-15 w-15 bg-indigo-200 rounded-full">
-            <h2 className="text-4xl font-extrabold text-indigo-700 ">
-              {" "}
-              {userid?.name.charAt(0).toUpperCase()}
-            </h2>
-          </div>
-          <div class="text-sm font-semibold mt-2">{userid?.name}</div>
-          <div class="text-xs text-gray-500">{userid?.email}</div>
-          <div class="flex flex-row items-center mt-3"></div>
-        </div>
-        <div class="flex flex-col bg-indigo-100 border border-gray-200  w-full py-6 px-4 rounded-lg mt-8">
-          <div class="flex flex-row items-center justify-between text-xs">
-            <span class="font-bold text-2xl pb-3 ">Friend List</span>
-          </div>
 
-          <form className="w-full mx-auto mb-2">
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
+        {/* Profile and Friend List */}
+        <div className="flex flex-col lg:flex-col lg:block hidden items-center bg-indigo-100 border border-gray-200 lg:mt-10 w-full py-2 lg:py-6 px-4 rounded-lg">
+
+       
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
+            
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center justify-center h-12 w-12 bg-indigo-200 rounded-full">
+                <h2 className="text-2xl font-extrabold text-indigo-700">
+                  {userid?.name?.charAt(0).toUpperCase()}
+                </h2>
               </div>
-              <input
-                onChange={handlesearch}
-                type="search"
-                id="default-search"
-                className="block w-full py-3 ps-10 text-sm text-black border border-gray-600 rounded-lg bg-indigo-100 "
-                placeholder="Search User list..."
-                required=""
-              />
+              <div>
+                <div className="text-lg font-semibold">{userid?.name}</div>
+                <div className="text-xs text-gray-500">{userid?.email}</div>
+              </div>
             </div>
-          </form>
 
-          {filterResult ? 
-          filterResult.map((item) => (
-            <div
-              onClick={() => handleselectChat(item)}
-              class="flex flex-col mt-4 -mx-2 "
-            >
+          
+          </div>
+        </div>
+
+        {/* Friend List */}
+        
+        <div className="flex flex-col bg-indigo-100 border border-gray-200 w-full lg:py-6 py-3 px-4 rounded-lg mt-4">
+          <span className="font-bold text-md lg:text-2xl mb-3">Friend List</span>
+            {/* Search Bar */}
+            <form className="w-full sm:w-auto lg:mt-4 sm:mt-0">
+              <div className="relative">
+                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  onChange={handlesearch}
+                  type="search"
+                  className="block w-full py-2 lg:py-3 mb-2 lg:mb-4 ps-10 text-sm text-black border border-gray-600 rounded-lg bg-indigo-100"
+                  placeholder="Search..."
+                />
+              </div>
+            </form>
+
+          {(filterResult || chatlist).map((item) => (
+            <div key={item.id} onClick={() => handleselectChat(item)} className="flex flex-col mt-2 -mx-2">
               <button
-                class={`" flex flex-row items-center ${
-                  userid?.id == item.senderid || userid?.id == item.receiverid
-                    ? "bg-indigo-600 text-white "
-                    : "bg-transparent"
-                } rounded-xl p-2"`}
+                className={`flex flex-row items-center ${
+                  userid?.id === item.senderid || userid?.id === item.receiverid ? "bg-indigo-600 text-white" : "bg-transparent"
+                } rounded-xl p-2`}
               >
-                <div class="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
-                  {auth.currentUser.uid == item.senderid
+                <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+                  {auth.currentUser.uid === item.senderid
                     ? item.receivername?.charAt(0).toUpperCase()
                     : item.sendername?.charAt(0).toUpperCase()}
                 </div>
-                {auth.currentUser.uid == item.senderid ? (
-                  <div class="ml-2 text-xl font-semibold">
-                    {item.receivername}
-                  </div>
-                ) : (
-                  <div class="ml-2 text-xl font-semibold">
-                    {item.sendername}
-                  </div>
-                )}
-              </button>
-            </div>
-          ))
-        :
-        chatlist.map((item) => (
-            <div
-              onClick={() => handleselectChat(item)}
-              class="flex flex-col mt-4 -mx-2 "
-            >
-              <button
-                class={`" flex flex-row items-center ${
-                  userid?.id == item.senderid || userid?.id == item.receiverid
-                    ? "bg-indigo-600 text-white "
-                    : "bg-transparent"
-                } rounded-xl p-2"`}
-              >
-                <div class="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
-                  {auth.currentUser.uid == item.senderid
-                    ? item.receivername?.charAt(0).toUpperCase()
-                    : item.sendername?.charAt(0).toUpperCase()}
+                <div className="ml-2 text-xs lg:text-xl font-semibold">
+                  {auth.currentUser.uid === item.senderid ? item.receivername : item.sendername}
                 </div>
-                {auth.currentUser.uid == item.senderid ? (
-                  <div class="ml-2 text-xl font-semibold">
-                    {item.receivername}
-                  </div>
-                ) : (
-                  <div class="ml-2 text-xl font-semibold">
-                    {item.sendername}
-                  </div>
-                )}
               </button>
             </div>
           ))}

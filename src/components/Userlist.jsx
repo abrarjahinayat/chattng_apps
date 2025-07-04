@@ -76,8 +76,8 @@ const Userlist = () => {
     <>
       {/* component */}
       {/* This is an example component */}
-      <div className="max-w-2xl mx-auto mt-4 ">
-        <div className="p-4 w-md bg-white rounded-lg border shadow-md sm:p-8 ">
+      <div className="max-w-2xl  mt-4 ">
+        <div className="p-4  lg:w-md bg-white rounded-lg lg:border shadow-md sm:p-8 ">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold leading-none text-gray-900">
               User List
