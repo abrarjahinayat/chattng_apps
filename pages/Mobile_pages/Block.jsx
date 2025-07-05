@@ -6,8 +6,8 @@ const Block = () => {
      const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div>
-             <div className='lg:hidden block'>
-              <div className="lg:hidden block">
+             <div className='lg:hidden  block'>
+              <div className="lg:hidden  block">
 
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       </div>

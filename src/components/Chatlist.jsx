@@ -44,7 +44,7 @@ const Chatlist = () => {
 
   return (
     <div>
-      <div className="flex flex-col lg:flex-col flex-wrap lg:py-8 lg:pl-6 pr-2 w-full lg:w-90 bg-white flex-shrink-0">
+      <div className="flex flex-col lg:flex-col flex-wrap lg:py-8 lg:pl-6 pr-2 w-full lg:w-90 bg-transparent flex-shrink-0">
 
         {/* Logo Section - hidden on mobile */}
         <div className="hidden lg:flex flex-row items-center justify-center h-12 lg:w-full">
@@ -83,7 +83,7 @@ const Chatlist = () => {
         {/* Friend List */}
         
         <div className="flex flex-col bg-indigo-100 border border-gray-200 w-full lg:py-6 py-3 px-4 rounded-lg mt-4">
-          <span className="font-bold text-md lg:text-2xl mb-3">Friend List</span>
+          <span className="font-bold text-md  lg:text-2xl mb-3">Friend List</span>
             {/* Search Bar */}
             <form className="w-full sm:w-auto lg:mt-4 sm:mt-0">
               <div className="relative">
@@ -107,7 +107,7 @@ const Chatlist = () => {
             <div key={item.id} onClick={() => handleselectChat(item)} className="flex flex-col mt-2 -mx-2">
               <button
                 className={`flex flex-row items-center ${
-                  userid?.id === item.senderid || userid?.id === item.receiverid ? "bg-indigo-600 text-white" : "bg-transparent"
+                  userid?.id === item.senderid || userid?.id === item.receiverid ? "bg-[#00ADB5] text-white" : "bg-transparent"
                 } rounded-xl p-2`}
               >
                 <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">

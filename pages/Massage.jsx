@@ -5,6 +5,7 @@ import { push, ref, set, getDatabase, onValue } from "firebase/database";
 import { auth } from "../src/firebase.config";
 import moment from "moment/moment";
 import Sidebar from "./Sidebar"; // adjust the path
+import bg2img from '../public/bg2.png'
 const Massage = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
   const db = getDatabase();
@@ -56,7 +57,7 @@ const handleKeyPress = (e) => {
 };
   // console.log(readmsg);
 return (
-  <div className="flex h-screen antialiased text-gray-800 flex-col lg:flex-row">
+  <div className="flex h-screen antialiased  text-gray-800 flex-col lg:flex-row">
     
     {/* Sidebar for mobile and desktop */}
     <div className="lg:hidden">
@@ -83,7 +84,7 @@ return (
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-full lg:w-full lg:overflow-hidden">
+      <div className="flex flex-col  lg:flex-row h-full lg:w-full lg:overflow-hidden">
         
         {/* Chatlist (Friendlist section) */}
         <div>
@@ -92,10 +93,10 @@ return (
 
 
         {/* Chat section */}
-        <div className="lg:flex w-sm flex-col lg:w-7xl  flex-1 h-full p-2 lg:p-4">
+        <div className="lg:flex w-sm  flex-col lg:w-7xl bg-[url(../public/bg2.png)] bg-[#222831]/80  flex-1 h-full p-2 lg:p-4">
           
           {userid && (
-            <div className="flex flex-col  rounded-2xl bg-gray-100 h-full p-2 lg:p-4">
+            <div className="flex flex-col  rounded-2xl  h-full p-2 lg:p-4">
               
               {/* Message display area */}
               <div className="flex flex-col h-full overflow-y-auto mb-4">
@@ -107,10 +108,10 @@ return (
                       item.senderid === auth.currentUser.uid ? (
                         <div className="col-start-6 col-end-15 p-3">
                           <div className="flex items-center gap-x-1 lg:gap-x-3 justify-end">
-                            <div className="lg:h-10 lg:w-10 h-7 w-7 rounded-full bg-indigo-500 flex items-center justify-center text-white">
+                            <div className="lg:h-10 lg:w-10 h-7 w-7 rounded-full bg-[#00ADB5] flex items-center justify-center text-white">
                               {item.sendername.charAt(0).toUpperCase()}
                             </div>
-                            <div className="lg:mr-3 text-wrap text-white text-sm bg-indigo-500 py-2 px-4 shadow rounded-xl sm:max-w-xs ">
+                            <div className="lg:mr-3 text-wrap text-[#EEEEEE] text-sm bg-[#00ADB5] py-2 px-4 shadow rounded-xl sm:max-w-xs ">
                               <h3>{item.msg}</h3>
                               <p className="text-xs text-white/80">
                                 {moment(item.date, "YYYYMMDD,h:mm:ss a").fromNow()}
@@ -121,10 +122,10 @@ return (
                       ) : (
                         <div className="col-start-1 col-end-8 p-3">
                           <div className="flex items-center  ">
-                            <div className="lg:h-10 lg:w-10 h-7 w-7 rounded-full bg-indigo-500 flex items-center justify-center text-white">
+                            <div className="lg:h-10 lg:w-10 h-7 w-7 rounded-full bg-white flex items-center justify-center text-black">
                               {userid?.name.charAt(0).toUpperCase()}
                             </div>
-                            <div className="relative ml-2 lg:ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl max-w-xs sm:max-w-sm md:max-w-md">
+                            <div className="relative ml-2 lg:ml-3 text-sm text-black bg-white py-2 px-4 shadow rounded-xl max-w-xs sm:max-w-sm md:max-w-md">
                               <h3>{item.msg}</h3>
                               <p className="text-xs text-gray-500">
                                 {moment(item.date, "YYYYMMDD,h:mm:ss a").fromNow()}
@@ -155,7 +156,7 @@ return (
 
                 <button
                   onClick={handlesend}
-                  className="ml-4 bg-indigo-500 hover:bg-indigo-600 text-white p-2 lg:px-4 py-2 rounded-xl flex items-center"
+                  className="ml-4 bg-[#00ADB5] hover:bg-indigo-600 text-white p-2 lg:px-4 py-2 rounded-xl flex items-center"
                 >
                   <span className="lg:block hidden">Send</span>
                   <svg className="w-4 h-4 lg:ml-2 transform rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">

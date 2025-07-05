@@ -5,7 +5,7 @@ import Sidebar from "../Sidebar"; // adjust the path
 const Friends = () => {
       const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className='lg:hidden block'>
+    <div className='lg:hidden bg-[url(../public/bg2.png)]  block'>
               <div className="lg:hidden block">
 
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

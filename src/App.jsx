@@ -16,6 +16,7 @@ import Block from '../pages/Mobile_pages/Block';
 
 
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
       { path: "friends", Component: Friends },
       { path: "requestlist", Component: Requestlist },
       { path: "blocklist", Component: Block },
+  
 
     ],
   },  {

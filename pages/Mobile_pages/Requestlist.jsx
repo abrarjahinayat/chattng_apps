@@ -5,12 +5,12 @@ import Friendrequestlist from '../../src/components/Friendrequestlist';
 const Requestlist = () => {
      const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div>
-             <div className='lg:hidden block'>
-              <div className="lg:hidden block">
+    <div  >
+             <div className='lg:hidden  block'>
+              
 
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      </div>
+      
 
       <div className="flex-1 flex flex-col">
         {/* Hamburger for mobile */}
@@ -22,7 +22,7 @@ const Requestlist = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <div>
+        <div  >
 
         <Friendrequestlist/>
         </div>

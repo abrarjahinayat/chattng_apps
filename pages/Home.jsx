@@ -9,7 +9,7 @@ const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen">
+    <div className=" bg-[url(../public/bg2.png)]  flex h-screen">
       <div className="lg:hidden block">
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       </div>
